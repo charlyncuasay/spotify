@@ -1,0 +1,325 @@
+<%- include('partials/navigation') %>
+<head>
+    <link href="../css/style.css" rel="stylesheet" />
+    <style>
+        body {
+            background-color: #121212; /* Dark background */
+            color: #ffffff; /* White text */
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .sidebar {
+            width: 250px;
+            position: fixed;
+            height: 100%;
+            background: #181818;
+            padding: 20px;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
+        }
+
+        .logo img {
+            width: 100%; /* Logo takes full width */
+            margin-bottom: 30px;
+        }
+
+        .main-container {
+            margin-left: 270px; /* Space for sidebar */
+            padding: 20px;
+            transition: margin 0.3s ease; /* Smooth transition */
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background: #282828;
+            position: fixed;
+            top: 0;
+            left: 250px;
+            right: 0;
+            z-index: 10;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .navbar ul {
+            list-style: none;
+            display: flex;
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar li {
+            margin: 0 15px;
+        }
+
+        .navbar a {
+            color: #ffffff;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .navbar a:hover {
+            color: #1DB954; /* Spotify green */
+        }
+
+        .navbar button {
+            background: #1DB954; /* Green button */
+            color: #fff;
+            border: none;
+            border-radius: 30px;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .navbar button:hover {
+            background: #1ed760; /* Lighter green on hover */
+        }
+
+        h1, h2, h3 {
+            text-align: center;
+            margin: 5px 0;
+        }
+
+        .song-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 0px; /* Leave space for the top bar */
+        }
+
+        .song-container img {
+            width: 250px; /* Adjusted cover image size */
+            height: 250px;
+            object-fit: cover;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            margin-bottom: 20px;
+        }
+
+        input[type="text"],
+        textarea {
+            width: 90%;
+            padding: 12px;
+            border-radius: 5px;
+            border: none;
+            margin: 10px 0;
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        input::placeholder,
+        textarea::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        textarea {
+            height: 120px;
+            resize: none;
+        }
+
+        .form-buttons {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            width: 90%; /* Button container width */
+        }
+
+        .form-buttons button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 30px;
+            background: #1DB954; /* Green background */
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex: 1; /* Flex-grow for equal width */
+            margin: 0 5px; /* Space between buttons */
+        }
+
+        .form-buttons button:hover {
+            background: #1ed760; /* Lighter green */
+        }
+
+        .delete-button {
+            background: linear-gradient(135deg, #ff4e50, #f00000); /* Red gradient for delete */
+        }
+
+        .delete-button:hover {
+            background: linear-gradient(135deg, #f00000, #ff4e50);
+        }
+
+        .back-button {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 30px;
+            background: #555;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .back-button:hover {
+            background: #444;
+        }
+
+        @media (max-width: 600px) {
+            .main-container {
+                margin-left: 0; /* Full width for small screens */
+            }
+
+            .topbar {
+                left: 0;
+                right: 0; /* Full width top bar */
+            }
+        }
+
+        .custom-audio-player {
+            width: 80%; /* Full width */
+            background: #282828; /* Dark background */
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .controls {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .play-btn, .mute-btn, #nextBtn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            margin: 0 10px;
+            transition: color 0.3s;
+        }
+
+        .play-btn:hover, .mute-btn:hover, #nextBtn:hover {
+            color: #1DB954; /* Spotify green on hover */
+        }
+
+        .progress-container {
+            flex-grow: 1;
+            margin: 0 10px;
+        }
+
+        #progressBar {
+            width: 100%;
+            cursor: pointer;
+            -webkit-appearance: none; /* Remove default styling */
+            appearance: none; /* Remove default styling */
+            height: 5px;
+            background: #3b3b3b; /* Dark progress bar */
+            border-radius: 5px;
+        }
+
+        #progressBar::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 15px;
+            height: 15px;
+            background: #1DB954; /* Green thumb */
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        #progressBar::-moz-range-thumb {
+            width: 15px;
+            height: 15px;
+            background: #1DB954; /* Green thumb */
+            border-radius: 50%;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="main-container">
+        <h1 style="color: #1ed760;">Update Song</h1> <br>
+        <div class="song-container">
+            
+            <% if (song.PicturePath) { %>
+                <img src="/<%= song.PicturePath %>" alt="Cover Image">
+            <% } %>
+
+            <div class="custom-audio-player">
+                <audio id="audioPlayer" preload="metadata">
+                    <source src="/<%= song.FilePath %>" type="audio/mp3">
+                    Your browser does not support the audio element.
+                </audio>
+                <div class="controls">
+                    <button id="playPauseBtn" class="play-btn">
+                        <span id="playIcon" class="fa fa-play"></span>
+                    </button>
+                    <div class="progress-container">
+                        <input type="range" id="progressBar" value="0" max="100">
+                    </div>
+                    <button id="muteBtn" class="mute-btn">
+                        <span id="muteIcon" class="fa fa-volume-up"></span>
+                    </button>
+                </div>
+            </div>            
+
+            <form action="/update/<%= song.id %>" method="POST">
+                <input type="text" name="SongName" value="<%= song.SongName %>" placeholder="Enter Song Name" required>
+                <input type="text" name="Author" value="<%= song.Author %>" placeholder="Enter Author Name" required>
+                <div class="form-buttons">
+                    <button type="submit">Update Song</button>
+                </div>
+            </form>
+            <button class="back-button" onclick="window.location.href='/playsong/<%= song.id %>'">Back to Home</button>
+        </div>
+    </div>
+
+    <script>
+        const audioPlayer = document.getElementById('audioPlayer');
+        const playPauseBtn = document.getElementById('playPauseBtn');
+        const playIcon = document.getElementById('playIcon');
+        const muteBtn = document.getElementById('muteBtn');
+        const muteIcon = document.getElementById('muteIcon');
+        const progressBar = document.getElementById('progressBar');
+    
+        playPauseBtn.addEventListener('click', function() {
+            if (audioPlayer.paused) {
+                audioPlayer.play();
+                playIcon.classList.remove('fa-play');
+                playIcon.classList.add('fa-pause');
+            } else {
+                audioPlayer.pause();
+                playIcon.classList.remove('fa-pause');
+                playIcon.classList.add('fa-play');
+            }
+        });
+    
+        muteBtn.addEventListener('click', function() {
+            audioPlayer.muted = !audioPlayer.muted;
+            muteIcon.classList.toggle('fa-volume-up', !audioPlayer.muted);
+            muteIcon.classList.toggle('fa-volume-mute', audioPlayer.muted);
+        });
+
+        // Update Progress Bar
+        audioPlayer.addEventListener('timeupdate', () => {
+            const progress = (audioPlayer.currentTime / audioPlayer.duration) * 100;
+            progressBar.value = progress;
+        });
+
+        // Seek through song
+        progressBar.addEventListener('input', () => {
+            audioPlayer.currentTime = (progressBar.value / 100) * audioPlayer.duration;
+        });
+    </script>
+    
+</body>
+</html>
+<%- include('partials/footer') %>
+<%- include('partials/end') %>

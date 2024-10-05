@@ -1,0 +1,89 @@
+<%- include('partials/start') %>  
+<%- include('partials/navigation') %>  
+
+<body>
+    <div class="main-container">
+        <div class="spotify-playlists">
+            <h2>My Playlist</h2>            
+            <form action="/delete-songs" method="POST"> <!-- Form to delete songs -->
+                <div class="list">
+                    <% if (musicList.length > 0) { %>
+                        <% musicList.forEach((music) => { %>
+                            <div class="item">
+                                <ul>
+                                    <li class="music-item">
+                                        <a href="/playsong/<%= music.id %>">
+                                            <% if (music.PicturePath) { %>
+                                                <img src="/<%= music.PicturePath %>" alt="Cover Image">
+                                            <% } %>
+                                            <h4><%= music.SongName %><br></h4>
+                                            <p><%= music.Author %></p>
+                                        </a>
+                                        <br>
+                                        <button type="button" class="delete-btn" onclick="deleteSong('<%= music.id %>')">
+                                            <i class="fa fa-trash"></i>
+                                            <span>Delete</span>
+                                        </button>
+
+                                        <style>
+                                            .delete-btn {
+                                                background: black; /* Spotify-like black background */
+                                                color: white; /* White text */
+                                                border: none; /* No border */
+                                                border-radius: 20px; /* Slightly smaller rounded corners */
+                                                padding: 2px 5px; /* Reduced padding for smaller size */
+                                                font-size: 8px; /* Smaller font size */
+                                                cursor: pointer; /* Pointer cursor on hover */
+                                                display: flex; /* Flex to align icon and text */
+                                                align-items: center; /* Center align items vertically */
+                                                transition: background 0.3s ease; /* Smooth transition for background */
+                                                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); /* Subtle shadow */
+                                            }
+                                        
+                                            .delete-btn:hover {
+                                                background: #f00000; /* Darker red on hover */
+                                            }
+                                        
+                                            .delete-btn i {
+                                                margin-right: 5px; /* Reduced space between icon and text */
+                                                font-size: 10px; /* Adjust icon size if needed */
+                                            }
+                                        </style>
+                                    </li>
+                                </ul>
+                            </div>
+                        <% }) %>
+                    <% } else { %>
+                        <p style="color: white;">No music available. Please add some!</p>
+                    <% } %>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://kit.fontawesome.com/23cecef777.js" crossorigin="anonymous"></script>
+    <script>
+        function deleteSong(songId) {
+            if (confirm('Are you sure you want to delete this song?')) {
+                fetch(`/delete/${songId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                })
+                .then(response => {
+                    if (response.ok) {
+                        window.location.reload(); // Refresh the page to reflect the changes
+                    } else {
+                        alert('Error deleting song. Please try again.');
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            }
+        }
+    </script>
+        
+</body>
+
+<%- include('partials/footer') %>
+<%- include('partials/end') %>

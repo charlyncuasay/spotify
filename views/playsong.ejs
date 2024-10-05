@@ -1,0 +1,324 @@
+<%- include('partials/navigation') %>
+<%- include('partials/start') %>
+
+<head>
+    <link href="../css/style.css" rel="stylesheet" />
+    
+    <style>
+        body {
+            background-color: #121212;
+            font-family: Arial, sans-serif;
+            margin: 0;
+        }
+    
+        /* General layout */
+        .main-container {
+            padding: 0px;
+        }
+    
+        h1, h2 {
+            color: white;
+            text-align: center;
+        }
+    
+        .center {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            width: 100%;
+            max-width: 500px;
+            height: auto;
+        }
+    
+        /* Spotify-like audio player container */
+        .spotify-audio-player {
+            background-color: #181818;
+            color: white;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 8px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+            width: 100%;
+            max-width: 500px;
+            margin: 20px auto;
+        }
+    
+        /* Album image */
+        .album-cover {
+            width: 50px; 
+            height: 50px; 
+            border-radius: 4px;
+        }
+    
+        /* Audio player controls */
+        .audio-controls {
+            display: flex;
+            align-items: center;
+        }
+    
+        .audio-controls i {
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+        }
+    
+        .audio-controls i:hover {
+            color: #1DB954; 
+        }
+    
+        /* Progress bar */
+        .progress-container {
+            display: flex;
+            align-items: center;
+            gap: 5px; 
+        }
+    
+        .progress-container input[type="range"] {
+            width: 150px; 
+            -webkit-appearance: none;
+            height: 5px;
+            background: #404040;
+            outline: none;
+            border-radius: 2.5px;
+            overflow: hidden;
+        }
+    
+        .progress-container input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #1DB954;
+            cursor: pointer;
+        }
+    
+        .time {
+            color: white;
+            font-size: 12px;
+        }
+    
+        /* Volume control */
+        .volume-control {
+            display: flex;
+            align-items: center;
+            gap: 5px; 
+        }
+    
+        .volume-control i {
+            font-size: 20px;
+        }
+    
+        .volume-control input[type="range"] {
+            width: 80px; /* Adjusted width for compactness */
+            -webkit-appearance: none;
+            height: 5px;
+            background: #404040;
+            outline: none;
+            border-radius: 2.5px;
+            overflow: hidden;
+        }
+    
+        .volume-control input[type="range"]::-webkit-slider-thumb {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #1DB954;
+            cursor: pointer;
+        }
+    
+        /* Row container for buttons */
+        .row-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px; 
+            margin-top: 10px; 
+        }
+    
+        /* Button styles */
+        .spotify-btn {
+            padding: 10px 20px; 
+            border: none;
+            border-radius: 20px; 
+            font-size: 14px; 
+            font-weight: bold;
+            cursor: pointer;
+            background-color: #fff;
+            color: #000;
+            transition: background-color 0.3s, color 0.3s;
+        }
+    
+        .spotify-btn:hover {
+            background-color: #1DB954; 
+            color: #fff;
+        }
+    
+        /* Add to playlist button style */
+        .spotify-add-btn {
+            background-color: #fff;
+            color: #000;
+        }
+    
+        .spotify-add-btn:hover {
+            background-color: #1DB954;
+            color: #fff;
+        }
+    
+        /* Update Song button style */
+        .spotify-update-btn {
+            background-color: #1DB954;
+            color: white;
+        }
+    
+        .spotify-update-btn:hover {
+            background-color: #fff;
+            color: #1DB954;
+        }
+        
+        .album-section {
+            display: flex; /* Use flexbox to align items */
+            align-items: center; /* Center align vertically */
+            gap: 15px; /* Space between album cover and song info */
+        }
+  
+        .album-cover-container {
+            display: flex; /* Use flexbox for album cover and info */
+            align-items: center; /* Center align vertically */
+        }
+  
+        .album-cover {
+            width: 60px; /* Size of the album cover */
+            height: 60px;
+            border-radius: 4px; /* Slightly rounded corners */
+        }
+  
+        .album-info {
+            text-align: left; /* Align text to the left */
+        }
+  
+        .song-name {
+            font-size: 16px; /* Font size for song name */
+            color: white; /* Color for song name */
+            margin: 0; /* Remove margin */
+        }
+  
+        .song-author {
+            font-size: 14px; 
+            color: #B3B3B3; 
+            margin: 0; 
+        }
+    </style>
+</head>
+
+<body>
+  
+    <div class="main-container">
+
+        <% if (song.PicturePath) { %>
+            <img src="/<%= song.PicturePath %>" alt="Cover Image" class="center">
+        <% } %>
+
+        <!-- Spotify-like audio player -->
+        <div class="spotify-audio-player">
+          <!-- Album Cover -->
+          <div class="album-section">
+              <% if (song.PicturePath) { %>
+                  <img src="/<%= song.PicturePath %>" alt="Album Cover" class="album-cover">
+              <% } else { %>
+                  <img src="default_album_cover.jpg" alt="Default Album Cover" class="album-cover">
+              <% } %>
+              <div class="album-info"> <!-- New container for song info -->
+                <h3 class="song-name"><%= song.SongName %></h3> <!-- Song name -->
+                <h4 class="song-author">by <%= song.Author %></h4> <!-- Author -->
+            </div>
+          </div>
+      
+          <!-- Audio Player Controls -->
+          <div class="audio-controls">
+              <i class="fa fa-play-circle" id="playPauseBtn"></i> <!-- Play/Pause -->
+          </div>
+      
+          <!-- Progress Bar -->
+          <div class="progress-container">
+              <span class="time" id="current-time">0:00</span>
+              <input type="range" id="progress-bar" value="0" max="100">
+              <span class="time" id="duration-time">3:30</span>
+          </div>
+      
+          <!-- Volume Control -->
+          <div class="volume-control">
+              <i class="fa fa-volume-up"></i>
+              <input type="range" id="volume-bar" value="100" max="100">
+          </div>
+      </div>
+      
+
+
+        <!-- Buttons for actions -->
+        <div class="row-container">
+            <!-- Update Song Button -->
+            <button class="spotify-btn spotify-update-btn" onclick="window.location.href='/update/<%= song.id %>'">Update Song</button>
+
+            <!-- Add to playlist Button -->
+            <form action="/add-to-playlist" method="POST">
+                <input type="hidden" name="song_id" value="<%= song.id %>">
+                <button class="spotify-btn spotify-add-btn" type="submit">Add to playlist</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const audioPlayer = new Audio('/<%= song.FilePath %>'); // Create a new audio instance for the song
+        const playPauseBtn = document.getElementById('playPauseBtn');
+        const progressBar = document.getElementById('progress-bar');
+        const currentTimeEl = document.getElementById('current-time');
+        const durationTimeEl = document.getElementById('duration-time');
+        const volumeBar = document.getElementById('volume-bar');
+
+        // Toggle Play/Pause
+        playPauseBtn.addEventListener('click', () => {
+            if (audioPlayer.paused) {
+                audioPlayer.play();
+                playPauseBtn.classList.remove('fa-play-circle');
+                playPauseBtn.classList.add('fa-pause-circle');
+            } else {
+                audioPlayer.pause();
+                playPauseBtn.classList.remove('fa-pause-circle');
+                playPauseBtn.classList.add('fa-play-circle');
+            }
+        });
+
+        // Update Progress Bar
+        audioPlayer.addEventListener('timeupdate', () => {
+            const progress = (audioPlayer.currentTime / audioPlayer.duration) * 100;
+            progressBar.value = progress;
+
+            currentTimeEl.textContent = formatTime(audioPlayer.currentTime);
+            durationTimeEl.textContent = formatTime(audioPlayer.duration);
+        });
+
+        // Seek through song
+        progressBar.addEventListener('input', () => {
+            audioPlayer.currentTime = (progressBar.value / 100) * audioPlayer.duration;
+        });
+
+        // Volume control
+        volumeBar.addEventListener('input', () => {
+            audioPlayer.volume = volumeBar.value / 100;
+        });
+
+        // Format time to mm:ss
+        function formatTime(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${minutes}:${secs < 10 ? '0' : ''}${secs}`;
+        }
+        
+    </script>
+</body>
+
+<%- include('partials/footer') %>
+<%- include('partials/end') %>

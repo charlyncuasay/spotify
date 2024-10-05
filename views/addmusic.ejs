@@ -1,0 +1,116 @@
+<%- include('partials/start') %>
+<%- include('partials/navigation') %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Music</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        label {
+            font-weight: 600;
+            color: #fff;
+            margin-top: 1px;
+            display: block;
+            text-align: left;
+            margin-bottom: 5px;
+        }
+        
+        input[type="text"],
+        input[type="file"],
+        textarea {
+            width: 90%;
+            padding: 12px;
+            border-radius: 10px;
+            border: none;
+            margin: 10px 0;
+            background: rgba(255, 255, 255, 0.3);
+            color: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        input::placeholder,
+        textarea::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        textarea {
+            height: 120px;
+            resize: none;
+        }
+
+        .form-buttons {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .form-buttons button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 50px;
+            background: white;
+            color: black;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            width: 48%;
+        }
+        
+        .form-buttons button:hover {
+            background: lightgreen;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 26px;
+                padding: 0%;
+            }
+
+            .form-buttons button {
+                font-size: 14px;
+            }
+        }
+
+        .main-container {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <div class="container">
+            <h1 style="text-align: center; color: lightgreen;">Upload Song</h1>
+            <form action="/addmusic" method="POST" enctype="multipart/form-data">
+                <label style="margin-left: 90px;">Song Name:</label>
+                <input type="text" name="SongName" placeholder="Enter Song Name" required>
+
+                <label style="margin-left: 90px;">Author:</label>
+                <input type="text" name="Author" placeholder="Enter Author Name" required>
+
+                <label style="margin-left: 90px;">Music File:</label>
+                <input type="file" name="music" accept="audio/*" required>
+
+                <label style="margin-left: 90px;">Cover Image (optional):</label>
+                <input type="file" name="picture" accept="image/*">
+                
+                <div class="form-buttons">
+                    <button style="background: linear-gradient(135deg, #f00000, #ff4e50);" type="button" onclick="window.location.href='/'">Cancel</button>
+                    <button type="submit">Upload Music</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
+<%- include('partials/footer') %>
+<%- include('partials/end') %>
